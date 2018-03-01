@@ -1,13 +1,24 @@
 from rest_framework import serializers
 from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
+from django.contrib.auth.models import User
+
+
+class UserSerializer(serializers.ModelSerializer):
+    snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippet.objects.all())
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'snippets')
 
 
 class SnippetSerializer(serializers.ModelSerializer):
     # ModelSerializer和Django中ModelForm功能相似
     # Serializer和Django中Form功能相似
+    owner = serializers.ReadOnlyField(source='owner.username')
+
     class Meta:
         model = Snippet
-        fields = ('id', 'title', 'code', 'linenos', 'language', 'style')
+        fields = ('id', 'title', 'code', 'linenos', 'language', 'style', 'owner')
 
 # class SnippetSerializer(serializers.Serializer):
 #     # 每一个表都可以建一个serializer，类似Django的Form  专门用于json
