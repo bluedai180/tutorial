@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+</head>
+<body>
+<p>test</p>
+<input type="button" onclick="get_test()" value="get test">
+<input type="button" onclick="get_user_name()" value="get user">
+<script>
+    post_test();
+    function post_test() {
+        $.post("http://127.0.0.1:8080/api-token-auth/", {
+                    'username': 'hipaduser',
+                    'password': 'hipad2018'
+                },
+                function (result) {
+                    console.log(result);
+                    if (result) {
+                        localStorage.token = result.token;
+                    }
+                })
+    }
+    function get_test() {
+        $.ajax({
+            headers: {
+                'Authorization': 'JWT ' + localStorage.token  //注意：jwt后面有个空格
+            },
+            type: "get",
+            url: "http://127.0.0.1:8080/snippets/2/",
+            success: function (result) {
+                console.log(result);
+                document.write(result.style);
+            }
+        })
+    }
+    function get_user_name() {
+        $.ajax({
+            headers: {
+                'Authorization': 'JWT ' + localStorage.token  //注意：jwt后面有个空格
+            },
+            type: "get",
+            url: "http://127.0.0.1:8080/get_user",
+            success: function (result) {
+                console.log(result);
+                document.write(result.style);
+            }
+        })
+    }
+</script>
+</body>
+</html>

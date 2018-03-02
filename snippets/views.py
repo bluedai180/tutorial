@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from rest_framework import generics
@@ -18,6 +19,15 @@ from rest_framework import permissions
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer, UserSerializer
 from snippets.permissions import IsOwnerOrReadOnly
+
+
+def test(request):
+    return render(request, 'snippets/test.html')
+
+
+def get_user(request):
+    print(request)
+    return HttpResponse(0)
 
 
 @api_view(('GET',))
